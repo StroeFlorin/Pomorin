@@ -40,7 +40,7 @@ struct SettingsView: View {
                             value: $pomodoroMinutes,
                             unit: "minutes",
                             color: timerColor,
-                            icon: "play.circle.fill"
+                            icon: "timer"
                         )
                         
                         Divider()
@@ -50,7 +50,7 @@ struct SettingsView: View {
                             value: $shortBreakMinutes,
                             unit: "minutes",
                             color: breakColor,
-                            icon: "pause.circle.fill"
+                            icon: "cup.and.saucer.fill"
                         )
                         
                         Divider()
@@ -60,7 +60,7 @@ struct SettingsView: View {
                             value: $longBreakMinutes,
                             unit: "minutes",
                             color: breakColor,
-                            icon: "stop.circle.fill"
+                            icon: "fork.knife"
                         )
                     }
                 }
