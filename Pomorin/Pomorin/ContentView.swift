@@ -9,13 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            PomodoroTimerView()
+                .toolbar {
+                    ToolbarItem {
+                        NavigationLink(destination: SettingsView()) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.title2)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                }
+                .navigationTitle("Pomorin - Pomodoro Timer for MacOS")
         }
-        .padding()
     }
 }
 
