@@ -1,5 +1,6 @@
 import AVFoundation
 import SwiftUI
+import UserNotifications
 
 enum TimerState {
     case work
@@ -30,6 +31,11 @@ class PomodoroViewModel: ObservableObject {
 
     init() {
         resetTimer()
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if let error = error {
+                print("Notification permission error: \(error.localizedDescription)")
+            }
+        }
     }
 
     func startTimer() {
@@ -72,7 +78,24 @@ class PomodoroViewModel: ObservableObject {
         pauseTimer()
 
         if sendNotification {
-            // notification logic here
+            let content = UNMutableNotificationContent()
+            let endMessage: String
+            switch currentState {
+            case .work:
+                endMessage = "Pomodoro timer ended!"
+            case .shortBreak:
+                endMessage = "Short break ended!"
+            case .longBreak:
+                endMessage = "Long break ended!"
+            default:
+                endMessage = "Timer ended"
+            }
+            content.title = "Pomorin"
+            content.body = endMessage
+            content.sound = UNNotificationSound.default
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         }
 
         switch currentState {
