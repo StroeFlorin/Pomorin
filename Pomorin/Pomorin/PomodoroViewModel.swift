@@ -84,34 +84,7 @@ class PomodoroViewModel: ObservableObject {
         pauseTimer()
 
         if sendNotification {
-            let content = UNMutableNotificationContent()
-            let endMessage: String
-            switch currentState {
-            case .work:
-                endMessage = "Pomodoro timer ended!"
-            case .shortBreak:
-                endMessage = "Short break ended!"
-            case .longBreak:
-                endMessage = "Long break ended!"
-            default:
-                endMessage = "Timer ended"
-            }
-            content.title = "Pomorin"
-            content.body = endMessage
-            content.sound = UNNotificationSound.default
-            let trigger = UNTimeIntervalNotificationTrigger(
-                timeInterval: 1,
-                repeats: false
-            )
-            let request = UNNotificationRequest(
-                identifier: UUID().uuidString,
-                content: content,
-                trigger: trigger
-            )
-            UNUserNotificationCenter.current().add(
-                request,
-                withCompletionHandler: nil
-            )
+            sendNotification(for: currentState)
         }
 
         switch currentState {
@@ -140,6 +113,31 @@ class PomodoroViewModel: ObservableObject {
         timerCompleted()
     }
 
+    private func sendNotification(for state: TimerState) {
+        let content = UNMutableNotificationContent()
+        let endMessage: String
+        switch state {
+        case .work:
+            endMessage = "Pomodoro timer ended!"
+        case .shortBreak:
+            endMessage = "Short break ended!"
+        case .longBreak:
+            endMessage = "Long break ended!"
+        default:
+            endMessage = "Timer ended"
+        }
+        content.title = "Pomorin"
+        content.body = endMessage
+        content.sound = UNNotificationSound.default
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: trigger
+        )
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
     var progress: Double {
         let totalTime: Int
         switch currentState {
