@@ -29,13 +29,17 @@ class PomodoroViewModel: ObservableObject {
     @AppStorage("longBreakInterval") var longBreakInterval: Int = 4
     @AppStorage("sendNotification") var sendNotification: Bool = true
     @AppStorage("skipBreaks") var skipBreaks: Bool = false
-
+    @AppStorage("autoStart") var autoStart: Bool = false
 
     init() {
         resetTimer()
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [
+            .alert, .sound,
+        ]) { granted, error in
             if let error = error {
-                print("Notification permission error: \(error.localizedDescription)")
+                print(
+                    "Notification permission error: \(error.localizedDescription)"
+                )
             }
         }
     }
@@ -95,9 +99,19 @@ class PomodoroViewModel: ObservableObject {
             content.title = "Pomorin"
             content.body = endMessage
             content.sound = UNNotificationSound.default
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            let trigger = UNTimeIntervalNotificationTrigger(
+                timeInterval: 1,
+                repeats: false
+            )
+            let request = UNNotificationRequest(
+                identifier: UUID().uuidString,
+                content: content,
+                trigger: trigger
+            )
+            UNUserNotificationCenter.current().add(
+                request,
+                withCompletionHandler: nil
+            )
         }
 
         switch currentState {
@@ -105,9 +119,6 @@ class PomodoroViewModel: ObservableObject {
             completedPomodoros += 1
             if skipBreaks {
                 currentState = .work
-                resetTimer()
-                startTimer()
-                return
             } else if completedPomodoros % longBreakInterval == 0 {
                 currentState = .longBreak
             } else {
@@ -120,6 +131,9 @@ class PomodoroViewModel: ObservableObject {
         }
 
         resetTimer()
+        if autoStart {
+            startTimer()
+        }
     }
 
     func skipToNext() {
@@ -138,7 +152,8 @@ class PomodoroViewModel: ObservableObject {
         case .stopped:
             totalTime = pomodoroMinutes * 60
         }
-        return totalTime > 0 ? Double(totalTime - timeRemaining) / Double(totalTime) : 0
+        return totalTime > 0
+            ? Double(totalTime - timeRemaining) / Double(totalTime) : 0
     }
 
     var formattedTime: String {

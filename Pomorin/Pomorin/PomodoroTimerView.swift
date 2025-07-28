@@ -96,12 +96,17 @@ struct PomodoroTimerView: View {
                 .buttonStyle(PlainButtonStyle())
             }
             
-          // toggle skip breaks
-            Toggle("Skip Breaks", isOn: $pomodoroViewModel.skipBreaks)
-                .padding(.horizontal)
-                .font(.headline)
-       
-            
+            VStack(alignment: .leading) {
+                // toggle skip breaks
+                Toggle("Skip Breaks", isOn: $pomodoroViewModel.skipBreaks)
+                    .padding(.horizontal)
+                    .font(.headline)
+                
+                // toggle auto start
+                Toggle("Auto Start", isOn: $pomodoroViewModel.autoStart)
+                    .padding(.horizontal)
+                    .font(.headline)
+            }
             Spacer()
             
             Text("Made with ❤️ by Florin Stroe")
