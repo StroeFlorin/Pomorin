@@ -42,7 +42,7 @@ struct PomodoroTimerView: View {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
-                Text("Completed pomodori: \(pomodoroViewModel.completedPomodoros)")
+                Text("Completed pomodori today: \(pomodoroViewModel.completedPomodoros)")
                     .font(.headline)
             }
             .padding(.horizontal)
@@ -95,6 +95,12 @@ struct PomodoroTimerView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
+            
+          // toggle skip breaks
+            Toggle("Skip Breaks", isOn: $pomodoroViewModel.skipBreaks)
+                .padding(.horizontal)
+                .font(.headline)
+       
             
             Spacer()
             

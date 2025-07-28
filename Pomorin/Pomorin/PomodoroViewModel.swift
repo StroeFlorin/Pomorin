@@ -28,6 +28,8 @@ class PomodoroViewModel: ObservableObject {
     }
     @AppStorage("longBreakInterval") var longBreakInterval: Int = 4
     @AppStorage("sendNotification") var sendNotification: Bool = true
+    @AppStorage("skipBreaks") var skipBreaks: Bool = false
+
 
     init() {
         resetTimer()
@@ -101,7 +103,12 @@ class PomodoroViewModel: ObservableObject {
         switch currentState {
         case .work:
             completedPomodoros += 1
-            if completedPomodoros % longBreakInterval == 0 {
+            if skipBreaks {
+                currentState = .work
+                resetTimer()
+                startTimer()
+                return
+            } else if completedPomodoros % longBreakInterval == 0 {
                 currentState = .longBreak
             } else {
                 currentState = .shortBreak
