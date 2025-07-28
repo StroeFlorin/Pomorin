@@ -26,7 +26,7 @@ class PomodoroViewModel: ObservableObject {
         didSet { resetTimer() }
     }
     @AppStorage("longBreakInterval") var longBreakInterval: Int = 4
-    @AppStorage("playSound") var playSound: Bool = true
+    @AppStorage("sendNotification") var sendNotification: Bool = true
 
     init() {
         resetTimer()
@@ -71,8 +71,8 @@ class PomodoroViewModel: ObservableObject {
     private func timerCompleted() {
         pauseTimer()
 
-        if playSound {
-            AudioServicesPlaySystemSound(1057)  // Glass sound
+        if sendNotification {
+            // notification logic here
         }
 
         switch currentState {

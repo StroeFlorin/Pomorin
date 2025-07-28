@@ -6,7 +6,7 @@ struct SettingsView: View {
     @AppStorage("shortBreakMinutes") private var shortBreakMinutes: Int = 5
     @AppStorage("longBreakMinutes") private var longBreakMinutes: Int = 15
     @AppStorage("longBreakInterval") private var longBreakInterval: Int = 4
-    @AppStorage("playSound") private var playSound: Bool = true
+    @AppStorage("sendNotification") private var sendNotification: Bool = true
 
     var body: some View {
         VStack {
@@ -55,7 +55,7 @@ struct SettingsView: View {
                 }
                 .tint(.accentColor)
 
-                Toggle("Play sound when timer ends", isOn: $playSound)
+                Toggle("Notify me when the timer ends", isOn: $sendNotification)
                     .font(.title3)
 
             }
