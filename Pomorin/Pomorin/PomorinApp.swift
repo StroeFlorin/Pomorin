@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct PomorinApp: App {
+    @StateObject private var pomodoroViewModel = PomodoroViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(pomodoroViewModel)
         }
     }
 }
