@@ -14,7 +14,7 @@ class PomodoroViewModel: ObservableObject {
     @Published var isRunning: Bool = false
     @Published var currentState: TimerState = .work
     @Published var completedPomodoros: Int = 0
-
+    
     private var timer: Timer?
 
     @AppStorage("pomodoroMinutes") var pomodoroMinutes: Int = 25 {
@@ -31,6 +31,8 @@ class PomodoroViewModel: ObservableObject {
     @AppStorage("skipBreaks") var skipBreaks: Bool = false
     @AppStorage("autoStart") var autoStart: Bool = false
 
+    var statusBarManager: StatusBarManager?
+
     init() {
         resetTimer()
         UNUserNotificationCenter.current().requestAuthorization(options: [
@@ -43,18 +45,22 @@ class PomodoroViewModel: ObservableObject {
             }
         }
     }
+    
+    func setStatusBarManager(_ manager: StatusBarManager) {
+        self.statusBarManager = manager
+        manager.setPomodoroViewModel(self)
+    }
 
     func startTimer() {
         guard !isRunning else { return }
         isRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
             _ in
-            DispatchQueue.main.async {
-                if self.timeRemaining > 0 {
-                    self.timeRemaining -= 1
-                } else {
-                    self.timerCompleted()
-                }
+            if self.timeRemaining > 0 {
+                self.timeRemaining -= 1
+                self.statusBarManager?.updateStatusBarTitle()
+            } else {
+                self.timerCompleted()
             }
         }
     }
@@ -78,13 +84,14 @@ class PomodoroViewModel: ObservableObject {
             timeRemaining = pomodoroMinutes * 60
             currentState = .work
         }
+        statusBarManager?.updateStatusBarTitle()
     }
 
     private func timerCompleted() {
         pauseTimer()
 
         if sendNotification {
-            sendNotification(for: currentState)
+            sendTimerEndedNotification(for: currentState)
         }
 
         switch currentState {
@@ -113,7 +120,7 @@ class PomodoroViewModel: ObservableObject {
         timerCompleted()
     }
 
-    private func sendNotification(for state: TimerState) {
+    private func sendTimerEndedNotification(for state: TimerState) {
         let content = UNMutableNotificationContent()
         let endMessage: String
         switch state {
@@ -129,15 +136,21 @@ class PomodoroViewModel: ObservableObject {
         content.title = "Pomorin"
         content.body = endMessage
         content.sound = UNNotificationSound.default
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: 1,
+            repeats: false
+        )
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
             content: content,
             trigger: trigger
         )
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().add(
+            request,
+            withCompletionHandler: nil
+        )
     }
-    
+
     var progress: Double {
         let totalTime: Int
         switch currentState {

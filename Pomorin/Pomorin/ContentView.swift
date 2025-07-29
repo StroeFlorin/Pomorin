@@ -20,7 +20,7 @@ struct ContentView: View {
                         }
                     }
                 }
-                .navigationTitle("Pomorin - Pomodoro Timer for MacOS")
+                .navigationTitle("Pomorin - Pomodoro timer for macOS")
         }
     }
 }
