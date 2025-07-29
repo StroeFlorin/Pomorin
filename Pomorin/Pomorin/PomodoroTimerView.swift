@@ -133,8 +133,6 @@ struct PomodoroTimerView: View {
             return .green
         case .longBreak:
             return .blue
-        case .stopped:
-            return .gray
         }
     }
 }

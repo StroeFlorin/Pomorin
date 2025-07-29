@@ -13,7 +13,7 @@ class StatusBarManager: ObservableObject {
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if let button = statusBarItem?.button {
-            button.title = "25:00"
+            button.title = "Pomorin" // Default title
             button.action = #selector(statusBarItemClicked)
             button.target = self
         }
@@ -43,8 +43,6 @@ class StatusBarManager: ObservableObject {
             return "☕️"
         case .longBreak:
             return "🛋️"
-        case .stopped:
-            return "⏸️"
         }
     }
     
