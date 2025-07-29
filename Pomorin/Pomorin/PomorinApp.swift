@@ -28,5 +28,9 @@ struct PomorinApp: App {
                     openWindow(id: "PomorinWindow")
                 }
         }
+        
+        Window("About", id: "AboutWindow") {
+            AboutView()
+        }
     }
 }
