@@ -12,10 +12,10 @@ struct AboutView: View {
             Spacer()
 
             VStack(spacing: 16) {
-                Image(systemName: "timer")
-                    .font(.system(size: 80))
-                    .foregroundColor(.red)
-                    .symbolRenderingMode(.hierarchical)
+                Image("logo")
+                    .resizable()
+                    .frame(width: 300, height: 300)
+                    .cornerRadius(16)
 
                 VStack(spacing: 8) {
                     Text("Pomorin")
