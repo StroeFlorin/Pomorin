@@ -1,10 +1,3 @@
-//
-//  PomorinApp.swift
-//  Pomorin
-//
-//  Created by Florin Stroe on 28.07.2025.
-//
-
 import AppKit
 import SwiftUI
 

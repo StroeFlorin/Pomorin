@@ -49,12 +49,12 @@ class StatusBarManager: ObservableObject {
     @objc private func statusBarItemClicked() {
         // Bring the main window to front when status bar item is clicked
         NSApp.activate(ignoringOtherApps: true)
-        
-        // Find and bring the main window to front
-        if let mainWindow = NSApp.windows.first(where: { $0.isMainWindow || $0.isKeyWindow }) {
-            mainWindow.makeKeyAndOrderFront(nil)
-        } else if let firstWindow = NSApp.windows.first {
-            firstWindow.makeKeyAndOrderFront(nil)
+      
+        if let window = NSApp.windows.first(where: { $0.styleMask.contains(.titled) }) {
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
+            window.makeKeyAndOrderFront(nil)
         }
     }
     
