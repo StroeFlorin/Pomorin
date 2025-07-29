@@ -4,6 +4,7 @@ import SwiftUI
 class StatusBarManager: ObservableObject {
     private var statusBarItem: NSStatusItem?
     weak private var pomodoroViewModel: PomodoroViewModel?
+    private var openWindow: OpenWindowAction?
     
     init() {
         setupStatusBar()
@@ -22,6 +23,10 @@ class StatusBarManager: ObservableObject {
     func setPomodoroViewModel(_ viewModel: PomodoroViewModel) {
         self.pomodoroViewModel = viewModel
         updateStatusBarTitle()
+    }
+    
+    func setOpenWindow(_ openWindow: OpenWindowAction) {
+        self.openWindow = openWindow
     }
     
     func updateStatusBarTitle() {
@@ -47,15 +52,11 @@ class StatusBarManager: ObservableObject {
     }
     
     @objc private func statusBarItemClicked() {
-        // Bring the main window to front when status bar item is clicked
+        // Open the PomodoroWindow using the openWindow function
+        openWindow?(id: "PomorinWindow")
+        
+        // Bring the app to front
         NSApp.activate(ignoringOtherApps: true)
-      
-        if let window = NSApp.windows.first(where: { $0.styleMask.contains(.titled) }) {
-            if window.isMiniaturized {
-                window.deminiaturize(nil)
-            }
-            window.makeKeyAndOrderFront(nil)
-        }
     }
     
     deinit {

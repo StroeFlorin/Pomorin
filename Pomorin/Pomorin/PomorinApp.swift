@@ -9,6 +9,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 @main
 struct PomorinApp: App {
+    @Environment(\.openWindow) private var openWindow
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var pomodoroViewModel = PomodoroViewModel()
     @StateObject private var statusBarManager = StatusBarManager()
@@ -20,6 +21,16 @@ struct PomorinApp: App {
                 .environmentObject(pomodoroViewModel)
                 .onAppear {
                     pomodoroViewModel.setStatusBarManager(statusBarManager)
+                    statusBarManager.setOpenWindow(openWindow)
+                }
+        }
+        
+        Window("Pomorin", id: "PomorinWindow") {
+            ContentView()
+                .environmentObject(pomodoroViewModel)
+                .onAppear {
+                    pomodoroViewModel.setStatusBarManager(statusBarManager)
+                    statusBarManager.setOpenWindow(openWindow)
                 }
         }
     }
