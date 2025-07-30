@@ -6,6 +6,7 @@ A simple and elegant Pomodoro timer for macOS built with SwiftUI.
 
 - Classic 25-minute Pomodoro sessions with short and long breaks
 - Circular progress indicator with color-coded states
+- Timer in the status bar
 - Customizable timer durations
 - Skip breaks and auto-start options
 - Native macOS notifications
